@@ -7,7 +7,7 @@ import { Product } from "../types";
 type ProductListItemProps = {
   product: Product;
 };
-const defaultPizzaImg =
+export const defaultPizzaImg =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
