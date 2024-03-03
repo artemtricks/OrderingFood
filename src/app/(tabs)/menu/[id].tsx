@@ -1,12 +1,21 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import products from "@/assets/data/products";
 import { defaultPizzaImg } from "@/src/components/ProductListItem";
+import Button from "@/src/components/Button";
 
 const sizes = ["S", "M", "L", "XL"];
 
 const ProductDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const [selectedSize, setSelectedSize] = React.useState("M");
+  const handleSize = (size: string) => {
+    setSelectedSize(size);
+  };
+  const addedToCart = () => {
+    console.warn("add to card pizza, size:", selectedSize);
+  };
   const product = products.find((item) => item.id.toString() === id);
 
   if (!product) {
@@ -22,12 +31,29 @@ const ProductDetailScreen = () => {
       <Text>Select size</Text>
       <View style={styles.sizes}>
         {sizes.map((item, index) => (
-          <View style={styles.size} key={index}>
-            <Text style={styles.sizeText}>{item}</Text>
-          </View>
+          <Pressable
+            onPress={() => handleSize(item)}
+            style={[
+              styles.size,
+              {
+                backgroundColor: selectedSize === item ? "gainsboro" : "white",
+              },
+            ]}
+            key={index}
+          >
+            <Text
+              style={[
+                styles.sizeText,
+                { color: selectedSize === item ? "black" : "gray" },
+              ]}
+            >
+              {item}
+            </Text>
+          </Pressable>
         ))}
       </View>
       <Text style={styles.price}>${product.price}</Text>
+      <Button text="Add to card" onPress={addedToCart} />
     </View>
   );
 };
@@ -35,7 +61,7 @@ const ProductDetailScreen = () => {
 const styles = StyleSheet.create({
   container: { backgroundColor: "white", flex: 1, padding: 10 },
   image: { width: "100%", aspectRatio: 1 },
-  price: { fontSize: 18, fontWeight: "bold" },
+  price: { fontSize: 18, fontWeight: "bold", marginTop: "auto" },
   sizes: {
     flexDirection: "row",
     justifyContent: "space-around",
